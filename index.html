@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка напитков</title>
+    <link rel="stylesheet" href="styles.css">
+<base target="_blank">
+</head>
+<body>
+    <nav class="header">
+        <div class="header__content">
+            <h1 class="header__title">Доставка напитков</h1>
+            <div id="headerMenu" class="header__buttons">
+                <button class="header__btn active" onclick="showPage('menu', event)">Меню</button>
+                <button class="header__btn" onclick="showPage('cart', event)">
+                    Корзина <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="header__btn" id="historyBtn" style="display: none;" onclick="showPage('history', event)">История</button>
+                <button class="header__btn" id="loginBtn" onclick="showPage('login', event)">Войти</button>
+                <span id="userGreeting" class="user-greeting" style="display: none;"></span>
+                <button class="header__btn" id="logoutBtn" style="display: none;" onclick="logoutUser()">Выход</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="menu" class="page active">
+            <h2>Выберите напитки</h2>
+            <div id="menuLoading" class="loading">Загружаю...</div>
+            <div id="drinksGrid" class="grid"></div>
+        </div>
+
+        <div id="cart" class="page">
+            <h2>Корзина</h2>
+            <div id="emptyMessage" class="empty" style="display: none;">
+                Корзина пуста
+            </div>
+            <div id="cartList" class="cart-list"></div>
+            <div id="cartFooter" class="cart-footer" style="display: none;">
+                <div class="total">
+                    Итого: <span id="totalPrice">0 р.</span>
+                </div>
+                <button class="btn btn--full" onclick="checkout()">Оформить</button>
+            </div>
+        </div>
+
+        <div id="history" class="page">
+            <h2>История заказов</h2>
+            <div id="historyEmpty" class="empty" style="display: none;">
+                Нет заказов
+            </div>
+            <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div id="login" class="page">
+            <div class="auth-container">
+                <div class="auth-form">
+                    <h2 id="authTitle">Вход в аккаунт</h2>
+
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form__group">
+                            <label>Email или телефон:</label>
+                            <input type="text" id="loginInput" placeholder="Email или 8999..." required>
+                        </div>
+                        <div class="form__group">
+                            <label>Пароль:</label>
+                            <input type="password" id="loginPassword" placeholder="Пароль" required>
+                        </div>
+                        <div id="loginError" class="error"></div>
+                        <button type="submit" class="btn btn--full">Войти</button>
+                    </form>
+
+                    <form id="registerForm" onsubmit="handleRegister(event)" style="display: none;">
+                        <div class="form__group">
+                            <label>Имя:</label>
+                            <input type="text" id="registerName" placeholder="Ваше имя" required maxlength="50">
+                        </div>
+                        <div class="form__group">
+                            <label>Email:</label>
+                            <input type="email" id="registerEmail" placeholder="Email" required>
+                        </div>
+                        <div class="form__group">
+                            <label>Телефон:</label>
+                            <input type="text" id="registerPhone" placeholder="89999999999" required maxlength="11" oninput="filterPhoneInput(this)">
+                        </div>
+                        <div class="form__group">
+                            <label>Пароль:</label>
+                            <input type="password" id="registerPassword" placeholder="Минимум 4 символа" required minlength="4">
+                        </div>
+                        <div id="registerError" class="error"></div>
+                        <button type="submit" class="btn btn--full">Зарегистрироваться</button>
+                    </form>
+
+                    <div class="auth-toggle">
+                        <span id="toggleText">Нет аккаунта? </span>
+                        <button type="button" id="toggleBtn" class="link-btn" onclick="toggleAuthForm()">Зарегистрироваться</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal" style="display: none;">
+        <div class="modal__content">
+            <button class="modal__close" onclick="closeCheckout()">X</button>
+            <h2>Оформление заказа</h2>
+
+            <div id="orderPreview" class="order-preview"></div>
+
+            <form id="orderForm" onsubmit="submitOrder(event)">
+                    <input type="hidden" id="orderName">
+                    <input type="hidden" id="orderPhone">
+                <div class="form__group">
+                    <label>Адрес:</label>
+                    <input type="text" id="orderAddress" placeholder="Адрес доставки" required maxlength="100">
+                </div>
+                <div class="form__group">
+                    <label>Способ оплаты:</label>
+                    <select id="paymentMethod" required style="width: 100%; padding: 10px; border: 1px solid #000; font-size: 14px;">
+                        <option value="">Выберите способ оплаты</option>
+                        <option value="1">Карта</option>
+                        <option value="2">Наличные</option>
+                        <option value="3">Онлайн-оплата</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--full">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
